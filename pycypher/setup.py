@@ -13,6 +13,8 @@
 # limitations under the License.
 
 import os
+import os.path
+import re
 from setuptools import setup, Extension
 
 bindings = Extension(
@@ -36,9 +38,24 @@ long_description = u"""
 Homepage: https://github.com/cleishm/libcypher-parser/tree/master/pycypher
 """.strip()
 
+def find_version():
+    configure_ac = os.path.join(
+        os.path.dirname(__file__), '..', 'configure.ac'
+    )
+    with open(configure_ac) as conf:
+        conf = conf.read()
+        match = re.search(
+            r'AC_INIT\(\[libcypher-parser\],\[(\d+\.\d+\.\d+)(\~[a-zA-Z_]*)?\]\)', conf
+        )
+        if match is None:
+            raise ValueError(
+                'Could not find version number in ../configure.ac file'
+            )
+        return match.group(1)
+
 setup(
     name=u'pycypher',
-    version='0.0.4',
+    version=find_version(),
     description=description,
     long_description=long_description,
     license='Apache License 2.0',
