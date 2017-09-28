@@ -13,6 +13,9 @@
 
 from pycypher.getters import GettersMixin
 
+import os
+if 'TRAVIS' not in os.environ:
+    raise ValueError('Test error')
 
 class CypherAstNode(GettersMixin):
     def __init__(self, id, type, instanceof, children, props, start, end):
