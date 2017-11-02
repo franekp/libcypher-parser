@@ -35,5 +35,9 @@ docker-valgrind:
 	docker run --rm -v $(abs_builddir):/$(PACKAGE) -ti debian-unstable-dev \
 		sh -c 'tar xzmf /$(PACKAGE)/$(DIST_ARCHIVES) && cd $(distdir) && ./configure --enable-silent-rules --disable-debug && make check && CK_FORK=no valgrind --leak-check=full --show-leak-kinds=all ./tests/check_$(PACKAGE)'
 
+docker-pycypher:
+	$(MAKE) dist
+	ci/pycypher_linux_build.sh
+
 clean-local:
 	rm -rf doc src/.doc
